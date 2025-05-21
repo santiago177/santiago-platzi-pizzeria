@@ -10,15 +10,22 @@ import lombok.Setter;
 @Setter
 public class OrderItemEntity {
     @EmbeddedId
-    private OrderItemId itemId;
+    private OrderItemId orderItemId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_pizza", referencedColumnName = "id_pizza", nullable = false, unique = true)
-    private PizzaEntity pizza;
+    @Column(name = "id_pizza")
+    private Integer idPizza;
 
     @Column(columnDefinition = "Decimal(2, 1)", nullable = false)
     private Double quantity;
 
     @Column(columnDefinition = "Decimal(5, 2)", nullable = false)
     private Double price;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_pizza", referencedColumnName = "id_pizza", nullable = false, unique = true, insertable = false, updatable = false)
+    private PizzaEntity pizza;
+
+    @JoinColumn(name = "orderItemId.id_order", referencedColumnName = "id_order", nullable = false, insertable = false, updatable = false)
+    @ManyToOne
+    private OrderEntity order;
 }

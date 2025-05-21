@@ -1,20 +1,34 @@
 package com.platzi.pizza.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 @Setter
 @Embeddable
-public class OrderItemId {
+@NoArgsConstructor
+public class OrderItemId implements Serializable {
+    // This is different in the course
     @Column(name = "id_item", nullable = false, unique = true)
     private Integer idItem;
 
-    @JoinColumn(name = "id_order", referencedColumnName = "id_order", nullable = false)
-    @ManyToOne
-    private OrderEntity order;
+    @Column(name = "id_order")
+    private Integer idOrder;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItemId that = (OrderItemId) o;
+        return Objects.equals(idItem, that.idItem) && Objects.equals(idOrder, that.idOrder);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idItem, idOrder);
+    }
 }
